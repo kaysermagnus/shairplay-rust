@@ -342,11 +342,10 @@ pub(crate) fn handle_setup(
     if let (Some(dacp_id), Some(active_remote)) =
         (request.header("DACP-ID"), request.header("Active-Remote"))
     {
-        let addr_bytes = crate::raop::rtp::remote_addr_bytes(&conn.remote_socket.ip().to_string());
         let remote = std::sync::Arc::new(crate::raop::DacpRemoteControl::new(
             dacp_id,
             active_remote,
-            &addr_bytes,
+            conn.remote_socket,
         ));
         conn.shared.handler.on_remote_control(remote);
     }
